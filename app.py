@@ -120,7 +120,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.17")
+st.markdown("Version 0.18")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -131,7 +131,7 @@ while True:
     df = get_data(filter_period=filter_period)
     df_poopee = get_poopee_data(filter_period=filter_period)
 
-    type2color = {'Poope': 'khaki', 'Pee': 'lightgreen'}
+    type2color = {'Poope': 'saddlebrown', 'Pee': 'yellowgreen'}
 
     with placeholder.container():
         df_gb = get_gb(df)
