@@ -44,14 +44,16 @@ def get_gb(df: pd.DataFrame) -> pd.DataFrame:
         Hours=('Hours', 'sum'),
     ).sort_values(by='Date')
 
+    df_gb = df_gb.fillna(0)
+
     for column in ['Kk', 'Kg']:
-        df_gb[column] = df_gb[column].fillna(0) / df_gb[column].max()
+        df_gb[column + '_num'] = df_gb[column] / df_gb[column].max()
 
     idx = df_gb[df_gb['Type'] == 'Sleep'].index
-    df_gb.loc[idx, 'Hours'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
+    df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
 
     idx = df_gb[df_gb['Type'] == 'Train'].index
-    df_gb.loc[idx, 'Hours'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
+    df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
 
     return df_gb
 
@@ -123,9 +125,9 @@ while True:
         kpi_list = st.columns(3)
 
         for kpi, col in zip(kpi_list, ['Kk', 'Kg', 'Hours']):
-            val = df[col].dropna().mean()
-            d = val - df[col].dropna()[:-1].mean()
-            kpi.metric(label=f"{col}s mean", value=val, delta=d)
+            val = round(df[col].dropna().mean(), 2)
+            # d = val - df[col].dropna()[:-1].mean()
+            kpi.metric(label=f"{col}s mean", value=val)  # , delta=d)
 
         col1, col2 = st.columns(2)
 
