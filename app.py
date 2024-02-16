@@ -52,6 +52,9 @@ def get_gb(df: pd.DataFrame, weight_goal: float = weight_goal) -> pd.DataFrame:
 
     merged_df = pd.merge(full_df, df_gb, how='left', on=['Date', idx_col]).sort_values(by=['Date', idx_col])
 
+    last_weight = merged_df[(merged_df['Kg'].notna()) & (merged_df['Kg'] > 0)]['Kg'].values[-1]
+    merged_df.loc[merged_df['Kg'].isna() & merged_df['Type'] == 'Weight', 'Kg'] = last_weight
+
     return merged_df
 
 
@@ -120,7 +123,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 1.2")
+st.markdown("Version 2.0")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
