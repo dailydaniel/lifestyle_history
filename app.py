@@ -107,7 +107,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.7")
+st.markdown("Version 0.8")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -215,7 +215,14 @@ while True:
 
             st.write(fig2)
 
-        st.markdown("### Full Table")
-        st.dataframe(df)
+        df_col1, df_col2 = st.columns([0.7, 0.3])
+
+        with df_col1:
+            st.markdown("### Full Table")
+            st.dataframe(df)
+
+        with df_col2:
+            st.markdown("### Grouped Table")
+            st.dataframe(df_gb)
 
     time.sleep(15)
