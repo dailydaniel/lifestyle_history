@@ -168,6 +168,7 @@ while True:
         with col1:
             txt = f"Health chart by {filter_period}" if filter_period else "Health chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
+
             fig1 = go.Figure(
                 layout=dict(
                     xaxis=dict(categoryorder="category descending"),
@@ -247,6 +248,12 @@ while True:
             for i in range(len(fig2.data)):
                 name = fig2.data[i].name
                 fig2.data[i].marker.color = type2color[name]
+
+            fig2.update_layout(
+                autosize=False,
+                width=550,
+                height=400
+            )
 
             st.write(fig2)
 
