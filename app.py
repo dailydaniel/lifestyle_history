@@ -123,7 +123,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 2.1")
+st.markdown("Version 2.2")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
@@ -175,7 +175,7 @@ while True:
             fig1 = go.Figure(
                 layout=dict(
                     xaxis=dict(categoryorder="category descending"),
-                    yaxis=dict(range=[-0.05, 1.05]),
+                    yaxis=dict(range=[0, 1]),
                     scattermode="group",
                     legend=dict(groupclick="toggleitem"),
                 )
