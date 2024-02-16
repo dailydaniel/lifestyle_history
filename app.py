@@ -120,7 +120,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.16")
+st.markdown("Version 0.17")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -131,10 +131,7 @@ while True:
     df = get_data(filter_period=filter_period)
     df_poopee = get_poopee_data(filter_period=filter_period)
 
-    # real_types = df_poopee['Type'].dropna().unique().tolist()
-    # cur_colors = choices(hex_colors, k=len(real_types))
-    # type2color = {rt: col for rt, col in zip(real_types, cur_colors)}
-    type2color = {'Poope': 'brown', 'Pee': 'green'}
+    type2color = {'Poope': 'khaki', 'Pee': 'lightgreen'}
 
     with placeholder.container():
         df_gb = get_gb(df)
@@ -166,7 +163,7 @@ while True:
         col1, col2 = st.columns(2)
 
         with col1:
-            txt = f"Health chart by {filter_period}" if filter_period else "Health chart"
+            txt = f"Health chart by {filter_period} weeks" if filter_period else "Health chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
 
             fig1 = go.Figure(
@@ -223,7 +220,7 @@ while True:
                 y=1, line_width=3,
                 line_dash="dash",
                 line_color="red",
-                annotation_text=f"Goal: {weight_goal}kg",
+                annotation_text=f"Goal: {int(weight_goal)}kg",
             )
 
             fig1.update_xaxes(tickformat="%d %b")
@@ -236,7 +233,7 @@ while True:
             st.write(fig1)
 
         with col2:
-            txt = f"Poopee chart by {filter_period}" if filter_period else "Poopee chart"
+            txt = f"Poopee chart by {filter_period} weeks" if filter_period else "Poopee chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
 
             df_gb_poopee = df_poopee.groupby(pd.Grouper(key='Date', freq='D'))['Type'].value_counts().reset_index()
