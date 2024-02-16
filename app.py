@@ -120,7 +120,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.15")
+st.markdown("Version 0.16")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
