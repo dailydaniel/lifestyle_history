@@ -107,7 +107,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.4")
+st.markdown("Version 0.5")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -122,15 +122,31 @@ while True:
     type2color = {rt: col for rt, col in zip(real_types, cur_colors)}
 
     with placeholder.container():
-        kpi_list = st.columns(3)
+        df_gb = get_gb(df)
 
-        for kpi, col in zip(kpi_list[:-1], ['Kk', 'Hours']):
-            val = int(df[col].dropna().mean())
-            kpi.metric(label=f"{col} mean", value=val)
+        kpi_list = st.columns(4)
+
+        val = int(df_gb[df_gb['Type'] == 'Sleep']['Hours'].dropna().mean())
+        d = val - (df_gb[df_gb['Type'] == 'Sleep']['Hours'][:-1].dropna().mean()
+                   if len(df_gb[df_gb['Type'] == 'Sleep']) > 1
+                   else val)
+        kpi_list[0].metric(label=f"Sleep hours mean by day", value=val, delta=d)
+
+        val = int(df_gb[df_gb['Type'] == 'Train']['Hours'].dropna().mean())
+        d = val - (df_gb[df_gb['Type'] == 'Train']['Hours'][:-1].dropna().mean()
+                   if len(df_gb[df_gb['Type'] == 'Train']) > 1
+                   else val)
+        kpi_list[1].metric(label=f"Train hours mean by day", value=val, delta=d)
+
+        val = int(df_gb['Kk'].dropna().mean())
+        d = val - (df_gb['Kk'][:-1].dropna().mean()
+                   if len(df_gb[df_gb['Type'] == 'Eat']) > 1
+                   else val)
+        kpi_list[2].metric(label=f"Calories mean by day", value=val, delta=d)
 
         val = df['Kg'].dropna().values[-1]
         d = df['Kg'].max() - df['Kg'].max()
-        kpi_list[-1].metric(label=f"current {col}", value=val, delta=d)
+        kpi_list[3].metric(label="current weight", value=val, delta=d)
 
         col1, col2 = st.columns(2)
 
@@ -140,7 +156,6 @@ while True:
         with col2:
             txt = f"Bar chart by {filter_period}" if filter_period else "Bar chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
-            df_gb = get_gb(df)
             fig2 = go.Figure(
                 layout=dict(
                     xaxis=dict(categoryorder="category descending"),
