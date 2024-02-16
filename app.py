@@ -120,7 +120,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 1.1")
+st.markdown("Version 1.2")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
@@ -182,7 +182,7 @@ while True:
                 go.Bar(
                     x=df_gb[df_gb['Type'] == 'Eat']['Date'],
                     y=df_gb[df_gb['Type'] == 'Eat']['Kk_num'],
-                    name="Eat",
+                    name="Eat (kcal)",
                     hovertext=df_gb[df_gb['Type'] == 'Eat']['Kk'],
                     marker_color="rosybrown",
                 )
@@ -192,7 +192,7 @@ while True:
                 go.Bar(
                     x=df_gb[df_gb['Type'] == 'Sleep']['Date'],
                     y=df_gb[df_gb['Type'] == 'Sleep']['Hours_num'],
-                    name="Sleep",
+                    name="Sleep (h-s)",
                     hovertext=df_gb[df_gb['Type'] == 'Sleep']['Hours'],
                     marker_color="darkcyan",
                 )
@@ -202,7 +202,7 @@ while True:
                 go.Bar(
                     x=df_gb[df_gb['Type'] == 'Train']['Date'],
                     y=df_gb[df_gb['Type'] == 'Train']['Hours_num'],
-                    name="Train",
+                    name="Train (h-s)",
                     hovertext=df_gb[df_gb['Type'] == 'Train']['Hours'],
                     marker_color="sandybrown",
                 )
@@ -212,7 +212,7 @@ while True:
                 go.Scatter(
                     x=df_gb[df_gb['Type'] == 'Weight']['Date'],
                     y=df_gb[df_gb['Type'] == 'Weight']['Kg_num'],
-                    name="Kg",
+                    name="My Weight (kg)",
                     hovertext=df_gb[df_gb['Type'] == 'Weight']['Kg'],
                     mode='lines+markers',
                     marker_color="purple",
