@@ -205,21 +205,16 @@ while True:
                     name="Kg",
                     hovertext=df_gb[df_gb['Type'] == 'Weight']['Kg'],
                     mode='lines+markers',
-                    marker_color="green",
+                    marker_color="purple",
                 )
             )
 
-            fig2.add_hline(y=1, line_width=3, line_dash="dash", line_color="red", annotation_text="Kg goal")
-
-            # fig2.add_trace(
-            #     go.Scatter(
-            #         x=df_gb[df_gb['Type'] == 'Weight']['Date'],
-            #         y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-            #         name="Kg goal",
-            #         hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-            #         line=dict(color='red', dash='dash'),
-            #     )
-            # )
+            fig2.add_hline(
+                y=1, line_width=3,
+                line_dash="dash",
+                line_color="red",
+                annotation_text=f"Goal: {weight_goal}kg",
+            )
 
             fig2.update_xaxes(tickformat="%d %b")
             fig2.update_layout(
