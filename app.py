@@ -46,14 +46,14 @@ def get_gb(df: pd.DataFrame) -> pd.DataFrame:
 
     df_gb = df_gb.fillna(0)
 
-    for column in ['Kk', 'Kg']:
+    for column in ['Kk', 'Kg', 'Hours']:
         df_gb[column + '_num'] = df_gb[column] / df_gb[column].max()
 
-    idx = df_gb[df_gb['Type'] == 'Sleep'].index
-    df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
-
-    idx = df_gb[df_gb['Type'] == 'Train'].index
-    df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
+    # idx = df_gb[df_gb['Type'] == 'Sleep'].index
+    # df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
+    #
+    # idx = df_gb[df_gb['Type'] == 'Train'].index
+    # df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
 
     return df_gb
 
@@ -107,7 +107,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.9")
+st.markdown("Version 0.10")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
