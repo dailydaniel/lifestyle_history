@@ -120,7 +120,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 1.0")
+st.markdown("Version 1.1")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
@@ -260,11 +260,11 @@ while True:
         df_col1, df_col2 = st.columns([0.4, 0.6])
 
         with df_col1:
-            st.markdown("<h4 style='text-align: center;'>Full Table</h4>", unsafe_allow_html=True)
-            st.dataframe(df)
+            st.markdown("<h4 style='text-align: center;'>Full Table Tail</h4>", unsafe_allow_html=True)
+            st.dataframe(df.tail())
 
         with df_col2:
-            st.markdown("<h4 style='text-align: center;'>Grouped Table</h4>", unsafe_allow_html=True)
-            st.dataframe(df_gb)
+            st.markdown("<h4 style='text-align: center;'>Grouped Table Tail</h4>", unsafe_allow_html=True)
+            st.dataframe(df_gb.tail())
 
     time.sleep(15)
