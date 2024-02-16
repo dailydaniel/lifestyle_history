@@ -110,7 +110,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.10")
+st.markdown("Version 0.11")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -149,7 +149,7 @@ while True:
 
         val = df['Kg'].dropna().values[-1]
         d = df['Kg'].max() - df['Kg'].min()
-        kpi_list[3].metric(label="current weight", value=val, delta=d)
+        kpi_list[3].metric(label="current weight", value=val, delta=round(d, 2))
 
         col1, col2 = st.columns(2)
 
@@ -215,8 +215,8 @@ while True:
                     y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
                     name="Kg goal",
                     hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-                    mode='dashed lines',
-                    marker_color="red",
+                    line=dict(color='red', dash='dash'),
+                    # marker_color="red",
                 )
             )
 
