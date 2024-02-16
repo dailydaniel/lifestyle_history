@@ -107,7 +107,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.6")
+st.markdown("Version 0.7")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -126,22 +126,22 @@ while True:
 
         kpi_list = st.columns(4)
 
-        val = df_gb[df_gb['Type'] == 'Sleep']['Hours'].dropna().mean()
-        d = (df_gb[df_gb['Type'] == 'Sleep']['Hours'][:-1].dropna().mean()
-             if len(df_gb[df_gb['Type'] == 'Sleep']) > 1
-             else val) - val
-        kpi_list[0].metric(label=f"Sleep hours mean by day", value=int(val), delta=round(d, 2))
+        val = df_gb[df_gb['Type'] == 'Sleep']['Hours'].mean()
+        d = val - (df_gb[df_gb['Type'] == 'Sleep']['Hours'][:-1].mean()
+                   if len(df_gb[df_gb['Type'] == 'Sleep']) > 1
+                   else val)
+        kpi_list[0].metric(label=f"Sleep hours mean by day", value=round(val, 2), delta=round(d, 2))
 
-        val = df_gb[df_gb['Type'] == 'Train']['Hours'].dropna().mean()
-        d = (df_gb[df_gb['Type'] == 'Train']['Hours'][:-1].dropna().mean()
-             if len(df_gb[df_gb['Type'] == 'Train']) > 1
-             else val) - val
-        kpi_list[1].metric(label=f"Train hours mean by day", value=int(val), delta=round(d, 2))
+        val = df_gb[df_gb['Type'] == 'Train']['Hours'].mean()
+        d = val - (df_gb[df_gb['Type'] == 'Train']['Hours'][:-1].mean()
+                   if len(df_gb[df_gb['Type'] == 'Train']) > 1
+                   else val)
+        kpi_list[1].metric(label=f"Train hours mean by day", value=round(val, 2), delta=round(d, 2))
 
         val = df_gb['Kk'].dropna().mean()
-        d = (df_gb['Kk'][:-1].dropna().mean()
-             if len(df_gb[df_gb['Type'] == 'Eat']) > 1
-             else val) - val
+        d = val - (df_gb['Kk'][:-1].dropna().mean()
+                   if len(df_gb[df_gb['Type'] == 'Eat']) > 1
+                   else val)
         kpi_list[2].metric(label=f"Calories mean by day", value=int(val), delta=round(d, 2))
 
         val = df['Kg'].dropna().values[-1]
