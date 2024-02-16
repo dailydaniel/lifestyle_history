@@ -232,7 +232,7 @@ while True:
                 height=400
             )
 
-            st.write(fig2)
+            st.write(fig1)
 
         with col2:
             txt = f"Poopee chart by {filter_period}" if filter_period else "Poopee chart"
