@@ -22,22 +22,6 @@ key = '1CZqJ-z0i2yGqFr5dTOG2YOYngKx8ngVVqsnPbja95-A'
 weight_goal = 69.0
 
 
-def get_d(n: int, delta: int = 0.01):
-    res = []
-
-    if n % 2 != 0:
-        res.append(0)
-        n -= 1
-
-    for i in range(n):
-        if i % 2 == 0:
-            res.append(delta + delta * (i // 2))
-        else:
-            res.append(-delta - delta * (i // 2))
-
-    return pd.Series(res).sample(len(res)).values
-
-
 def get_gb(df: pd.DataFrame, weight_goal: float = weight_goal) -> pd.DataFrame:
     df_gb = df.groupby(['Type', pd.Grouper(key='Date', freq='D')], as_index=False).agg(
         Kk=('Kk', 'sum'),
@@ -58,7 +42,16 @@ def get_gb(df: pd.DataFrame, weight_goal: float = weight_goal) -> pd.DataFrame:
     # idx = df_gb[df_gb['Type'] == 'Train'].index
     # df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
 
-    return df_gb
+    idx_col = 'Type'
+
+    all_dates = pd.date_range(start=df_gb['Date'].min(), end=df_gb['Date'].max(), freq='D')
+    all_codes = df_gb[idx_col].unique()
+    full_index = pd.MultiIndex.from_product([all_dates, all_codes], names=['Date', idx_col])
+    full_df = pd.DataFrame(index=full_index).reset_index()
+
+    merged_df = pd.merge(full_df, df_gb, how='left', on=['Date', idx_col]).sort_values(by=['Date', idx_col])
+
+    return merged_df
 
 
 def h2n(s: str) -> str:
@@ -110,7 +103,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.13")
+st.markdown("Version 0.14")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -157,7 +150,7 @@ while True:
             st.markdown(f"<h4 style='text-align: center;'>Хуй говно жопа</h4>", unsafe_allow_html=True)
 
         with col2:
-            txt = f"Bar chart by {filter_period}" if filter_period else "Bar chart"
+            txt = f"Health chart by {filter_period}" if filter_period else "Health chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
             fig2 = go.Figure(
                 layout=dict(
