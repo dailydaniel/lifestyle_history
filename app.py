@@ -237,7 +237,7 @@ while True:
             )
             fig1.update_layout(legend=dict(
                 yanchor="top",
-                y=0.99,
+                y=1.01,
                 xanchor="left",
                 x=1.01
             ))
