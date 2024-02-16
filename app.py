@@ -87,7 +87,7 @@ def get_data(filter_period: int = None, key: str = key_life) -> pd.DataFrame:
     df['Hours'] = df['Hours'].apply(lambda x: h2n(x))
     df['Hours'] = pd.to_numeric(df['Hours'], errors='coerce')
 
-    if filter_period:
+    if type(filter_period) == int:
         date = pd.Timestamp.now()
         delta_date = pd.to_timedelta(f'{filter_period * 7} days')
         period_date = date - delta_date
@@ -103,7 +103,7 @@ def get_poopee_data(filter_period: int = None, key: str = key_poopee) -> pd.Data
                      parse_dates=['Date'],
                      dayfirst=True)
 
-    if filter_period:
+    if type(filter_period) == int:
         date = pd.Timestamp.now()
         delta_date = pd.to_timedelta(f'{filter_period * 7} days')
         period_date = date - delta_date
@@ -120,16 +120,19 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.18")
+st.markdown("Version 1.0")
 
-filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
-filter_period = None if filter_period == "All" else filter_period
+filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
+# filter_period = None if filter_period == "All" else filter_period
 
 placeholder = st.empty()
 
 while True:
     df = get_data(filter_period=filter_period)
     df_poopee = get_poopee_data(filter_period=filter_period)
+
+    if filter_period == "All Sync":
+        df_poopee = df_poopee[df_poopee['Date'] >= df['Date'].min()]
 
     type2color = {'Poope': 'saddlebrown', 'Pee': 'yellowgreen'}
 
@@ -163,7 +166,7 @@ while True:
         col1, col2 = st.columns(2)
 
         with col1:
-            txt = f"Health chart by {filter_period} weeks" if filter_period else "Health chart"
+            txt = f"Health chart by {filter_period} weeks" if type(filter_period) == int else "Health chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
 
             fig1 = go.Figure(
@@ -233,7 +236,7 @@ while True:
             st.write(fig1)
 
         with col2:
-            txt = f"Poopee chart by {filter_period} weeks" if filter_period else "Poopee chart"
+            txt = f"Poopee chart by {filter_period} weeks" if type(filter_period) == int else "Poopee chart"
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
 
             df_gb_poopee = df_poopee.groupby(pd.Grouper(key='Date', freq='D'))['Type'].value_counts().reset_index()
