@@ -19,6 +19,7 @@ st.set_page_config(
 )
 
 key = '1CZqJ-z0i2yGqFr5dTOG2YOYngKx8ngVVqsnPbja95-A'
+weight_goal = 69.0
 
 
 def get_d(n: int, delta: int = 0.01):
@@ -37,7 +38,7 @@ def get_d(n: int, delta: int = 0.01):
     return pd.Series(res).sample(len(res)).values
 
 
-def get_gb(df: pd.DataFrame) -> pd.DataFrame:
+def get_gb(df: pd.DataFrame, weight_goal: float = weight_goal) -> pd.DataFrame:
     df_gb = df.groupby(['Type', pd.Grouper(key='Date', freq='D')], as_index=False).agg(
         Kk=('Kk', 'sum'),
         Kg=('Kg', 'first'),
@@ -46,8 +47,10 @@ def get_gb(df: pd.DataFrame) -> pd.DataFrame:
 
     df_gb = df_gb.fillna(0)
 
-    for column in ['Kk', 'Kg', 'Hours']:
+    for column in ['Kk', 'Hours']:
         df_gb[column + '_num'] = df_gb[column] / df_gb[column].max()
+
+    df_gb['Kg_num'] = df_gb['Kg'] / weight_goal
 
     # idx = df_gb[df_gb['Type'] == 'Sleep'].index
     # df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
@@ -167,6 +170,16 @@ while True:
 
             fig2.add_trace(
                 go.Bar(
+                    x=df_gb[df_gb['Type'] == 'Eat']['Date'],
+                    y=df_gb[df_gb['Type'] == 'Eat']['Kk_num'],
+                    name="Eat",
+                    hovertext=df_gb[df_gb['Type'] == 'Eat']['Kk'],
+                    marker_color="rosybrown",
+                )
+            )
+
+            fig2.add_trace(
+                go.Bar(
                     x=df_gb[df_gb['Type'] == 'Sleep']['Date'],
                     y=df_gb[df_gb['Type'] == 'Sleep']['Hours_num'],
                     name="Sleep",
@@ -186,22 +199,23 @@ while True:
             )
 
             fig2.add_trace(
-                go.Bar(
-                    x=df_gb[df_gb['Type'] == 'Eat']['Date'],
-                    y=df_gb[df_gb['Type'] == 'Eat']['Kk_num'],
-                    name="Eat",
-                    hovertext=df_gb[df_gb['Type'] == 'Eat']['Kk'],
-                    marker_color="rosybrown",
-                )
-            )
-
-            fig2.add_trace(
                 go.Scatter(
                     x=df_gb[df_gb['Type'] == 'Weight']['Date'],
                     y=df_gb[df_gb['Type'] == 'Weight']['Kg_num'],
                     name="Kg",
                     hovertext=df_gb[df_gb['Type'] == 'Weight']['Kg'],
                     mode='lines+markers',
+                    marker_color="green",
+                )
+            )
+
+            fig2.add_trace(
+                go.Scatter(
+                    x=df_gb[df_gb['Type'] == 'Weight']['Date'],
+                    y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
+                    name="Kg goal",
+                    hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
+                    mode='dashed lines',
                     marker_color="red",
                 )
             )
@@ -218,11 +232,11 @@ while True:
         df_col1, df_col2 = st.columns([0.4, 0.6])
 
         with df_col1:
-            st.markdown("### Full Table")
+            st.markdown("<h4 style='text-align: center;'>Full Table</h4>", unsafe_allow_html=True)
             st.dataframe(df)
 
         with df_col2:
-            st.markdown("### Grouped Table")
+            st.markdown("<h4 style='text-align: center;'>Grouped Table</h4>", unsafe_allow_html=True)
             st.dataframe(df_gb)
 
     time.sleep(15)
