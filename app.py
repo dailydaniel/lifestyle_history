@@ -107,7 +107,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.8")
+st.markdown("Version 0.9")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -138,14 +138,14 @@ while True:
                    else val)
         kpi_list[1].metric(label=f"Train hours mean by day", value=round(val, 2), delta=round(d, 2))
 
-        val = df_gb['Kk'].dropna().mean()
-        d = val - (df_gb['Kk'][:-1].dropna().mean()
+        val = df_gb[df_gb['Type'] == 'Eat']['Kk'].dropna().mean()
+        d = val - (df_gb[df_gb['Type'] == 'Eat']['Kk'][:-1].dropna().mean()
                    if len(df_gb[df_gb['Type'] == 'Eat']) > 1
                    else val)
         kpi_list[2].metric(label=f"Calories mean by day", value=int(val), delta=round(d, 2))
 
         val = df['Kg'].dropna().values[-1]
-        d = df['Kg'].max() - df['Kg'].max()
+        d = df['Kg'].max() - df['Kg'].min()
         kpi_list[3].metric(label="current weight", value=val, delta=d)
 
         col1, col2 = st.columns(2)
@@ -215,7 +215,7 @@ while True:
 
             st.write(fig2)
 
-        df_col1, df_col2 = st.columns([0.7, 0.3])
+        df_col1, df_col2 = st.columns([0.4, 0.6])
 
         with df_col1:
             st.markdown("### Full Table")
