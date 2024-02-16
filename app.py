@@ -212,7 +212,7 @@ while True:
                 go.Scatter(
                     x=df_gb[df_gb['Type'] == 'Weight']['Date'],
                     y=df_gb[df_gb['Type'] == 'Weight']['Kg_num'],
-                    name="My Weight (kg)",
+                    name="Weight (kg)",
                     hovertext=df_gb[df_gb['Type'] == 'Weight']['Kg'],
                     mode='lines+markers',
                     marker_color="purple",
