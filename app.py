@@ -107,7 +107,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.3")
+st.markdown("Version 0.4")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -126,12 +126,11 @@ while True:
 
         for kpi, col in zip(kpi_list[:-1], ['Kk', 'Hours']):
             val = int(df[col].dropna().mean())
-            # d = val - df[col].dropna()[:-1].mean()
-            kpi.metric(label=f"{col} mean", value=val)  # , delta=d)
+            kpi.metric(label=f"{col} mean", value=val)
 
         val = df['Kg'].dropna().values[-1]
         d = df['Kg'].max() - df['Kg'].max()
-        kpi.metric(label=f"current {col}", value=val, delta=d)
+        kpi_list[-1].metric(label=f"current {col}", value=val, delta=d)
 
         col1, col2 = st.columns(2)
 
