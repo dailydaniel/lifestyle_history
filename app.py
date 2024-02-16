@@ -110,7 +110,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.11")
+st.markdown("Version 0.12")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -169,6 +169,16 @@ while True:
             )
 
             fig2.add_trace(
+                go.Scatter(
+                    x=df_gb[df_gb['Type'] == 'Weight']['Date'],
+                    y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
+                    name="Kg goal",
+                    hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
+                    line=dict(color='red', dash='dash'),
+                )
+            )
+
+            fig2.add_trace(
                 go.Bar(
                     x=df_gb[df_gb['Type'] == 'Eat']['Date'],
                     y=df_gb[df_gb['Type'] == 'Eat']['Kk_num'],
@@ -209,16 +219,15 @@ while True:
                 )
             )
 
-            fig2.add_trace(
-                go.Scatter(
-                    x=df_gb[df_gb['Type'] == 'Weight']['Date'],
-                    y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-                    name="Kg goal",
-                    hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-                    line=dict(color='red', dash='dash'),
-                    # marker_color="red",
-                )
-            )
+            # fig2.add_trace(
+            #     go.Scatter(
+            #         x=df_gb[df_gb['Type'] == 'Weight']['Date'],
+            #         y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
+            #         name="Kg goal",
+            #         hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
+            #         line=dict(color='red', dash='dash'),
+            #     )
+            # )
 
             fig2.update_xaxes(tickformat="%d %b")
             fig2.update_layout(
