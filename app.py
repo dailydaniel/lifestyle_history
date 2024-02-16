@@ -110,7 +110,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 0.12")
+st.markdown("Version 0.13")
 
 filter_period = st.selectbox("Select num weeks:", ["All", 4, 1])
 filter_period = None if filter_period == "All" else filter_period
@@ -169,16 +169,6 @@ while True:
             )
 
             fig2.add_trace(
-                go.Scatter(
-                    x=df_gb[df_gb['Type'] == 'Weight']['Date'],
-                    y=[1] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-                    name="Kg goal",
-                    hovertext=[weight_goal] * len(df_gb[df_gb['Type'] == 'Weight']['Date']),
-                    line=dict(color='red', dash='dash'),
-                )
-            )
-
-            fig2.add_trace(
                 go.Bar(
                     x=df_gb[df_gb['Type'] == 'Eat']['Date'],
                     y=df_gb[df_gb['Type'] == 'Eat']['Kk_num'],
@@ -218,6 +208,8 @@ while True:
                     marker_color="green",
                 )
             )
+
+            fig2.add_hline(y=1, line_width=3, line_dash="dash", line_color="red", annotation_text="Kg goal")
 
             # fig2.add_trace(
             #     go.Scatter(
