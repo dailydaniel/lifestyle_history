@@ -1,12 +1,9 @@
 import time
 import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 import matplotlib
-from random import choices
-import requests
 
 import warnings
 warnings.simplefilter('ignore')
@@ -36,12 +33,6 @@ def get_gb(df: pd.DataFrame, weight_goal: float = weight_goal) -> pd.DataFrame:
         df_gb[column + '_num'] = df_gb[column] / df_gb[column].max()
 
     df_gb['Kg_num'] = df_gb['Kg'] / weight_goal
-
-    # idx = df_gb[df_gb['Type'] == 'Sleep'].index
-    # df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
-    #
-    # idx = df_gb[df_gb['Type'] == 'Train'].index
-    # df_gb.loc[idx, 'Hours_num'] = df_gb.loc[idx, 'Hours'] / df_gb.loc[idx, 'Hours'].max()
 
     idx_col = 'Type'
 
@@ -125,7 +116,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 3.0")
+st.markdown("Version 3.1")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 
@@ -143,23 +134,23 @@ while True:
 
         kpi_list = st.columns(4)
 
-        val = df_gb[df_gb['Type'] == 'Sleep']['Hours'].mean()
+        val = df_gb[df_gb['Type'] == 'Sleep']['Hours'].values[-1]
         d = val - (df_gb[df_gb['Type'] == 'Sleep']['Hours'][:-1].mean()
                    if len(df_gb[df_gb['Type'] == 'Sleep']) > 1
                    else val)
-        kpi_list[0].metric(label=f"Sleep hours mean by day", value=round(val, 2), delta=round(d, 2))
+        kpi_list[0].metric(label=f"Today's sleep hours", value=round(val, 2), delta=round(d, 2))
 
-        val = df_gb[df_gb['Type'] == 'Train']['Hours'].mean()
+        val = df_gb[df_gb['Type'] == 'Train']['Hours'].values[-1]
         d = val - (df_gb[df_gb['Type'] == 'Train']['Hours'][:-1].mean()
                    if len(df_gb[df_gb['Type'] == 'Train']) > 1
                    else val)
-        kpi_list[1].metric(label=f"Train hours mean by day", value=round(val, 2), delta=round(d, 2))
+        kpi_list[1].metric(label=f"Today's train hours", value=round(val, 2), delta=round(d, 2))
 
-        val = df_gb[df_gb['Type'] == 'Eat']['Kk'].dropna().mean()
-        d = val - (df_gb[df_gb['Type'] == 'Eat']['Kk'][:-1].dropna().mean()
+        val = df_gb[df_gb['Type'] == 'Eat']['Kk'].values[-1]
+        d = val - (df_gb[df_gb['Type'] == 'Eat']['Kk'][:-1].mean()
                    if len(df_gb[df_gb['Type'] == 'Eat']) > 1
                    else val)
-        kpi_list[2].metric(label=f"Calories mean by day", value=int(val), delta=round(d, 2))
+        kpi_list[2].metric(label=f"Today's kilocalories", value=int(val), delta=round(d, 2))
 
         val = df['Kg'].dropna().values[-1]
         d = df['Kg'].dropna().values[-1] - df['Kg'].dropna().values[0]
