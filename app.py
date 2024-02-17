@@ -125,7 +125,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 2.5")
+st.markdown("Version 2.6")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
@@ -138,8 +138,6 @@ while True:
 
     if filter_period == "All Sync":
         df_poopee = df_poopee[df_poopee['Date'] >= df['Date'].min()]
-
-    type2color = {'Poope': 'saddlebrown', 'Pee': 'yellowgreen'}
 
     with placeholder.container():
         df_gb = get_gb(df)
@@ -251,14 +249,31 @@ while True:
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
 
             df_gb_poopee = df_poopee.groupby(pd.Grouper(key='Date', freq='D'))['Type'].value_counts().reset_index()
-            fig2 = px.bar(data_frame=df_gb_poopee, y='count', x='Date', color='Type')
-            fig2.update_layout(legend=dict(yanchor="top", y=1.2, xanchor="left", x=0.01))
-            fig2.update_layout(margin=dict(l=50, r=50))
-            fig2.update_yaxes(nticks=5)
+            # fig2 = px.bar(data_frame=df_gb_poopee, y='count', x='Date', color='Type')
+            fig2 = go.Figure(data=[
+                go.Bar(
+                    name='Poope',
+                    x=df_gb_poopee[df_gb_poopee['Type'] == 'Poope']['Date'],
+                    y=df_gb_poopee[df_gb_poopee['Type'] == 'Poope']['count'],
+                    marker_color="saddlebrown"
+                ),
+                go.Bar(
+                    name='Pee',
+                    x=df_gb_poopee[df_gb_poopee['Type'] == 'Pee']['Date'],
+                    y=df_gb_poopee[df_gb_poopee['Type'] == 'Pee']['count'],
+                    marker_color="yellowgreen"
+                )
+            ])
 
-            for i in range(len(fig2.data)):
-                name = fig2.data[i].name
-                fig2.data[i].marker.color = type2color[name]
+            fig2.update_layout(barmode='stack')
+            # fig2.update_layout(legend=dict(yanchor="top", y=1.2, xanchor="left", x=0.01))
+            # fig2.update_layout(margin=dict(l=50, r=50))
+            fig2.update_yaxes(nticks=5)
+            fig2.update_xaxes(tickformat="%d %b")
+
+            # for i in range(len(fig2.data)):
+            #     name = fig2.data[i].name
+            #     fig2.data[i].marker.color = type2color[name]
 
             fig2.update_layout(
                 autosize=False,
