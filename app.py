@@ -125,7 +125,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 2.7")
+st.markdown("Version 2.8")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
@@ -229,7 +229,8 @@ while True:
                 annotation_text=f"Goal: {int(weight_goal)}kg",
             )
 
-            # fig1.update_xaxes(tickformat="%d %b")
+            fig1.update_xaxes(tickformat="%d %b",
+                              nticks=df_gb['Date'].nunique() + 1)
             fig1.update_layout(
                 autosize=False,
                 width=550,
@@ -269,7 +270,8 @@ while True:
             # fig2.update_layout(legend=dict(yanchor="top", y=1.2, xanchor="left", x=0.01))
             # fig2.update_layout(margin=dict(l=50, r=50))
             fig2.update_yaxes(nticks=5)
-            # fig2.update_xaxes(tickformat="%d %b")
+            fig2.update_xaxes(tickformat="%d %b",
+                              nticks=df_gb_poopee['Date'].nunique() + 1)
 
             # for i in range(len(fig2.data)):
             #     name = fig2.data[i].name
