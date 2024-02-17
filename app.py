@@ -125,10 +125,9 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 2.8")
+st.markdown("Version 3.0")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
-# filter_period = None if filter_period == "All" else filter_period
 
 placeholder = st.empty()
 
@@ -231,17 +230,18 @@ while True:
 
             fig1.update_xaxes(tickformat="%d %b",
                               nticks=df_gb['Date'].nunique() + 1)
+
             fig1.update_layout(
+                legend=dict(
+                    yanchor="top",
+                    y=1.01,
+                    xanchor="left",
+                    x=1.01
+                ),
                 autosize=False,
                 width=550,
                 height=400
             )
-            fig1.update_layout(legend=dict(
-                yanchor="top",
-                y=1.01,
-                xanchor="left",
-                x=1.01
-            ))
 
             st.write(fig1)
 
@@ -250,7 +250,6 @@ while True:
             st.markdown(f"<h4 style='text-align: center;'>{txt}</h1>", unsafe_allow_html=True)
 
             df_gb_poopee = df_poopee.groupby(pd.Grouper(key='Date', freq='D'))['Type'].value_counts().reset_index()
-            # fig2 = px.bar(data_frame=df_gb_poopee, y='count', x='Date', color='Type')
             fig2 = go.Figure(data=[
                 go.Bar(
                     name='Poope',
@@ -266,28 +265,23 @@ while True:
                 )
             ])
 
-            fig2.update_layout(barmode='stack')
-            # fig2.update_layout(legend=dict(yanchor="top", y=1.2, xanchor="left", x=0.01))
-            # fig2.update_layout(margin=dict(l=50, r=50))
             fig2.update_yaxes(nticks=5)
+
             fig2.update_xaxes(tickformat="%d %b",
                               nticks=df_gb_poopee['Date'].nunique() + 1)
 
-            # for i in range(len(fig2.data)):
-            #     name = fig2.data[i].name
-            #     fig2.data[i].marker.color = type2color[name]
-
             fig2.update_layout(
+                legend=dict(
+                    yanchor="top",
+                    y=1.01,
+                    xanchor="left",
+                    x=1.01
+                ),
                 autosize=False,
                 width=550,
-                height=400
+                height=400,
+                barmode='stack'
             )
-            fig2.update_layout(legend=dict(
-                yanchor="top",
-                y=1.01,
-                xanchor="left",
-                x=1.01
-            ))
 
             st.write(fig2)
 
