@@ -55,6 +55,8 @@ def get_gb(df: pd.DataFrame, weight_goal: float = weight_goal) -> pd.DataFrame:
     last_weight = merged_df[(merged_df['Kg'].notna()) & (merged_df['Kg'] > 0)]['Kg'].values[-1]
     merged_df.loc[merged_df['Kg'].isna() & merged_df['Type'] == 'Weight', 'Kg'] = last_weight
 
+    merged_df = merged_df.fillna(0)
+
     return merged_df
 
 
@@ -123,7 +125,7 @@ st.markdown("Start: 2024-02-16. Logbook of my Health.")
 st.markdown("Powered by google sheet and siri shortcuts.")
 url_tg = "https://t.me/mandanya77"
 st.markdown("made by Daniel Zholkovsky [telegram](%s)" % url_tg)
-st.markdown("Version 2.4")
+st.markdown("Version 2.5")
 
 filter_period = st.selectbox("Select num weeks:", ["All Sync", "All", 4, 1])
 # filter_period = None if filter_period == "All" else filter_period
@@ -163,8 +165,8 @@ while True:
         kpi_list[2].metric(label=f"Calories mean by day", value=int(val), delta=round(d, 2))
 
         val = df['Kg'].dropna().values[-1]
-        d = df['Kg'].max() - df['Kg'].min()
-        kpi_list[3].metric(label="current weight", value=val, delta=round(d, 2))
+        d = df['Kg'].dropna().values[-1] - df['Kg'].dropna().values[0]
+        kpi_list[3].metric(label="Current weight", value=val, delta=round(d, 2))
 
         col1, col2 = st.columns(2)
 
